@@ -4,7 +4,7 @@ FROM debian:11.7
 RUN apt-get update && apt-get install -y nginx
 
 # Copy custom configuration files
-COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY --chmod=755 config/nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80
 EXPOSE 80
