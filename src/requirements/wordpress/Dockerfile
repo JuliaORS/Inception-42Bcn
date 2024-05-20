@@ -1,20 +1,26 @@
-# Usa la imagen oficial de Debian como base
 FROM debian:11.7
 
-# Instala los paquetes necesarios para WordPress
-RUN apt-get update && \
-    apt-get install -y php-fpm php-mysql php-curl php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip unzip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    mkdir -p /var/www/html
+RUN apt-get update &&  apt-get -y install  \
+	curl \
+	php7.4-fpm \
+	php7.4-mysqli \
+	mariadb-client
 
-# Descarga WordPress desde el sitio oficial e instálalo
-RUN curl -o wordpress.tar.gz -SL https://wordpress.org/latest.tar.gz && \
-    tar -xzf wordpress.tar.gz -C /var/www/html --strip-components=1 && \
-    rm wordpress.tar.gz
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+	&& chmod +x wp-cli.phar \
+	&& mv wp-cli.phar /usr/local/bin/wp
 
-# Copia el archivo de configuración de WordPress personalizado
-COPY wp-config.php /var/www/html/wp-config.php
 
-# CMD para usar PHP-FPM junto con WordPress
-CMD ["php-fpm", "-F"]
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/
+
+RUN mkdir -p /run/php
+RUN chmod 755 /run/php
+
+COPY ./tools/wp.sh /usr/local/bin/wp.sh
+RUN chmod +x /usr/local/bin/wp.sh
+
+EXPOSE 9000
+
+WORKDIR /var/www/html/
+
+ENTRYPOINT [ "/usr/local/bin/wp.sh" ]

@@ -1,16 +1,14 @@
 FROM debian:11.7
 
-# Actualiza los repositorios del sistema e instala NGINX
-RUN apt-get update && apt-get install -y nginx
+RUN apt-get update && apt-get install -y nginx openssl
 
-# Copia tu archivo de configuración personalizado de NGINX al contenedor
-COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 443
 
-# Cambia los permisos del archivo de configuración si es necesario
-RUN chmod 755 /etc/nginx/nginx.conf
+COPY ./conf/default /etc/nginx/sites-enabled/default
+COPY ./tools/nginx_www.sh /var/www
 
-# Expon el puerto 80 para que el servidor NGINX sea accesible desde el exterior
-#EXPOSE 80
+RUN chmod +x /var/www/nginx_www.sh
 
-# Inicia NGINX cuando se inicie el contenedor
+ENTRYPOINT [ "var/www/nginx_www.sh" ]
+
 CMD ["nginx", "-g", "daemon off;"]

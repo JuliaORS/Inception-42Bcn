@@ -14,10 +14,10 @@ $(DATA_DIR)/%:
 down:
 	@docker compose -f ./src/docker-compose.yml down
 
-clean: down
+clean: 
 	-@docker stop $$(docker ps -qa)
-	-@docker system prune --all --force
-	-@docker volume prune --all --force
+	-docker rm $$(docker ps -qa)
+	-docker rmi -f $$(docker images -qa)
 	-@docker volume rm $$(docker volume ls -q)
 	@$(RM) $(DATA_DIR)
 

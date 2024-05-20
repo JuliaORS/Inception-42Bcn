@@ -1,14 +1,17 @@
-# Usa la imagen oficial de Debian como imagen base
 FROM debian:11.7
 
-# Actualiza los repositorios del sistema e instala MARIADB
 RUN apt-get update && apt-get install -y mariadb-server
 
-# Copia tu archivo de configuración personalizado de NGINX al contenedor
-COPY config/mariadb.conf /etc/mysql/my.conf
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.conf
 
-# Expon el puerto 80 para que el servidor NGINX sea accesible desde el exterior
+RUN mkdir -p /var/run/mysqld && \
+	chown -R mysql:mysql /var/run/mysqld && \
+	chmod 777 /var/run/mysqld
+
 EXPOSE 3306
 
-# Inicia NGINX cuando se inicie el contenedor
-CMD ["mysqld"]
+COPY --chmod=755 tools/mariadb.sh /usr/local/bin/mariadb.sh
+
+RUN mysql_install_db
+
+ENTRYPOINT [ "/usr/local/bin/mariadb.sh" ]
