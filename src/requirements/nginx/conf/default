@@ -4,8 +4,9 @@ server
 	listen	[::]:443 ssl;
 
 	server_name julolle-.42.fr;
-	ssl_certificate /etc/ssl/certs/nginx.cert;
-	ssl_certificate_key /etc/ssl/private/nginx.key;
+
+	ssl_certificate /etc/ssl/julolle-.42.fr.crt;
+	ssl_certificate_key /etc/ssl/julolle-.42.fr.key;	
 	ssl_protocols TLSv1.3;
 
 	index index.php;

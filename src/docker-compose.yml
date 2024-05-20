@@ -6,31 +6,31 @@ networks:
     driver: bridge
 
 services:
+  nginx:
+    image: nginx
+    restart: always
+    container_name: nginx
+    build: ./requirements/nginx
+    networks:
+      - julolle-net
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/html
+
   mariadb:
     image: mariadb
     restart: always
     container_name: mariadb
     build:
       context: ./requirements/mariadb
+    networks:
+      - julolle-net
     env_file:
-      - .env 
+      - .env
     volumes:
       - mariadb_data:/var/lib/mysql
-    networks:
-      - julolle-net
-
-  nginx:
-    image: nginx
-    restart: always
-    container_name: nginx
-    build: ./requirements/nginx
-    ports:
-      - "443:443"
-    volumes:
-      - wordpress_data:/var/www/html     
-    networks:
-      - julolle-net
-
+     
   wordpress:
     image: wordpress
     restart: always
@@ -38,13 +38,13 @@ services:
     depends_on:
       - mariadb    
     build: ./requirements/wordpress
+    networks:
+      - julolle-net
     env_file:
       - .env
     volumes:
       - wordpress_data:/var/www/html
-    networks:
-      - julolle-net
-
+  
 volumes:
   mariadb_data:
     driver: local
