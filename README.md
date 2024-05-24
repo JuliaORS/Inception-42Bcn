@@ -7,7 +7,7 @@ The infrastructure is to be orchestrated using Docker Compose, with each service
 The containers are built from custom Docker images using Dockerfiles.
 
 ## Pre-requisites
-  - Docker installed - [Download docker]((https://docs.docker.com/)
+  - Docker installed - [Download docker](https://docs.docker.com/)
 
 ## Project specifications
 
