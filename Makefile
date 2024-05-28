@@ -1,7 +1,7 @@
 all:
-	@docker-compose -f ./src/docker-compose.yml up -d --build
+	@docker-compose -f ./srcs/docker-compose.yml up -d --build
 down:
-	@docker-compose -f ./src/docker-compose.yml down
+	@docker-compose -f ./srcs/docker-compose.yml down
 clean:
 	@rm -rf /home/julolle-/data/mysql/*
 	@rm -rf /home/julolle-/data/wordpress/*
