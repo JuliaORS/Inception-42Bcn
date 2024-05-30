@@ -44,7 +44,7 @@ services:
       - .env
     volumes:
       - wordpress_data:/var/www/html
-  
+
 volumes:
   mariadb_data:
     driver: local
@@ -58,3 +58,8 @@ volumes:
       type: none
       device: /home/julolle-/data/wordpress
       o: bind
+
+networks:
+  julolle-net:
+    name: julolle-net
+    driver: bridge

@@ -10,7 +10,7 @@ then
 	mysql -e "FLUSH PRIVILEGES;"
 fi
 
-mysqladmin -u root -p${MYSQL_ROOT_PASSWORD} shutdown
+mysqladmin -u ${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PASSWORD} shutdown
 
 mysqld
 
